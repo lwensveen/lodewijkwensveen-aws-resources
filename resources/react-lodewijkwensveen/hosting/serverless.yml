@@ -1,0 +1,22 @@
+service:
+  name: react-hosting
+org: lwensveen
+app: react-lodewijkwensveen-resources
+
+custom: ${file(../../../serverless.common.yml):custom}
+
+provider:
+  name: aws
+  region: eu-west-1
+  stage: dev
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+resources:
+  # Cloudfront
+  - ${file(./cloudfront/cloudfront.yml)}
+  # Route53
+  - ${file(./route53/route53.yml)}

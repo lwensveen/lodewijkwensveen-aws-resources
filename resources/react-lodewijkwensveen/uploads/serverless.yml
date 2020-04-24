@@ -1,0 +1,37 @@
+service:
+  name: react-uploads
+org: lwensveen
+app: react-lodewijkwensveen-resources
+
+provider:
+  name: aws
+  region: eu-west-1
+  stage: dev
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    SSLCERT: ${file(../../env.${self:provider.stage}.yml):SSLCERT}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+resources:
+  Resources:
+    WebsiteBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.fullDomainName}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: 404.html
+    WebsiteBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref 'WebsiteBucket'
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action: s3:GetObject
+              Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebsiteBucket', /*]]

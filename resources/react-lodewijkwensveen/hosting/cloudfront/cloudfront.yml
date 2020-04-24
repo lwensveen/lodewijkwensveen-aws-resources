@@ -1,0 +1,33 @@
+Resources:
+  WebsiteCloudfront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: Cloudfront Distribution pointing to S3 bucket
+        Origins:
+          - DomainName: ${self:custom.fullDomainName}${self:custom.partialBucketURL}
+            Id: S3Origin
+            CustomOriginConfig:
+              HTTPPort: '80'
+              HTTPSPort: '443'
+              OriginProtocolPolicy: http-only
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        Aliases:
+          - ${self:custom.fullDomainName}
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn: ${self:custom.sslCert}
+          SslSupportMethod: sni-only
