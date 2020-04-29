@@ -1,18 +1,16 @@
 custom:
-  # Our stage is based on what is passed in when running serverless
-  # commands. Or fallsback to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
-  # Set the table name here so we can use it while testing locally
+  framework: ${opt:framework, ''}
+  frontEndProject: ${opt:frontEndProject}
+  serviceRole: arn:aws:iam::883106830682:role/codebuild-service-role
   tableName: react-${self:custom.stage}-content
-  # Set our DynamoDB throughput for prod and all other non-prod stages.
   tableThroughputs:
     prod: 5
-    default: 1
+    dev: 1
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
-  # Load our secret environment variables based on the current stage.
-  # Fallback to default if it is not in prod.
-  environment: ${file(./env.yml):${self:custom.stage}, file(./env.yml):default}
   domain: "lodewijkwensveen.nl"
-  fullDomainName: "react.lodewijkwensveen.nl"
-  sslCert: "arn:aws:acm:us-east-1:883106830682:certificate/d7246150-96e5-447e-a4de-6cbf7815b7a4"
-  partialBucketURL: ".s3-website-eu-west-1.amazonaws.com"
+  fullDomainName: ${self:custom.stage}.${self:custom.framework}.lodewijkwensveen.nl
+  partialBucketURL: "s3-website-eu-west-1.amazonaws.com"
+  githubUrl: https://github.com/lwensveen/${self:custom.frontEndProject}.git
+  sslCert: "arn:aws:acm:us-east-1:883106830682:certificate/2af38ad4-406d-4673-956a-85502fb1a41f"
+  cfnRole: "arn:aws:iam::883106830682:role/cfn-role"

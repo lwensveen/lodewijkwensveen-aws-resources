@@ -3,22 +3,21 @@ service:
 org: lwensveen
 app: lodewijkwensveen-resources
 
+custom: ${file(../../../serverless.common.yml):custom}
+
 provider:
   name: aws
   region: eu-west-1
   stage: dev
   runtime: nodejs12.x
-  apiGateway:
-    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
-  environment:
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  cfnRole: ${self:custom.cfnRole}
 
 resources:
   Resources:
     WebsiteBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: 'react.lodewijkwensveen.nl'
+        BucketName: ${self:custom.fullDomainName}
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html

@@ -1,0 +1,36 @@
+service:
+  name: cicd
+org: lwensveen
+app: lodewijkwensveen-resources
+
+custom: ${file(../../../serverless.common.yml):custom}
+
+provider:
+  name: aws
+  region: eu-west-1
+  stage: dev
+  runtime: nodejs12.x
+  cfnRole: ${self:custom.cfnRole}
+
+resources:
+  Resources:
+    Project:
+      Type: AWS::CodeBuild::Project
+      Properties:
+        Name: ${opt:frontEndProject}
+        Description: "test"
+        BadgeEnabled: true
+        Environment:
+          Type: LINUX_CONTAINER
+          ComputeType: BUILD_GENERAL1_SMALL
+          Image: aws/codebuild/standard:4.0
+        Artifacts:
+          Type: S3
+          Location: ${self:custom.fullDomainName}
+          EncryptionDisabled: true
+        ServiceRole: ${self:custom.serviceRole}
+        Source:
+          Type: GITHUB
+          Location: ${self:custom.githubUrl}
+        Triggers:
+          Webhook: true

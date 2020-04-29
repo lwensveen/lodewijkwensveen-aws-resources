@@ -5,7 +5,7 @@ Resources:
       DistributionConfig:
         Comment: Cloudfront Distribution pointing to S3 bucket
         Origins:
-          - DomainName: ${self:custom.fullDomainName}${self:custom.partialBucketURL}
+          - DomainName: ${self:custom.fullDomainName}.${self:custom.partialBucketURL}
             Id: S3Origin
             CustomOriginConfig:
               HTTPPort: '80'
