@@ -12,5 +12,5 @@ custom:
   fullDomainName: ${self:custom.stage}.${self:custom.framework}.lodewijkwensveen.nl
   partialBucketURL: "s3-website-eu-west-1.amazonaws.com"
   githubUrl: https://github.com/lwensveen/${self:custom.frontEndProject}.git
-  sslCert: "arn:aws:acm:us-east-1:883106830682:certificate/2af38ad4-406d-4673-956a-85502fb1a41f"
-  cfnRole: "arn:aws:iam::883106830682:role/cfn-role"
+  sslCert: ${ssm:arns/serverless~true}
+  cfnRole: ${ssm:aws-resources-cfn-role~true}
