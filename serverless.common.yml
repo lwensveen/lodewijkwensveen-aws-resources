@@ -1,9 +1,8 @@
 custom:
   stage: ${opt:stage, self:provider.stage}
   framework: ${opt:framework, ''}
-  frontEndProject: ${opt:frontEndProject}
+  frontEndProject: ${opt:frontEndProject, ''}
   serviceRole: arn:aws:iam::883106830682:role/codebuild-service-role
-  tableName: react-${self:custom.stage}-content
   tableThroughputs:
     prod: 5
     dev: 1
@@ -12,5 +11,5 @@ custom:
   fullDomainName: ${self:custom.stage}.${self:custom.framework}.lodewijkwensveen.nl
   partialBucketURL: "s3-website-eu-west-1.amazonaws.com"
   githubUrl: https://github.com/lwensveen/${self:custom.frontEndProject}.git
-  sslCert: ${ssm:arns/serverless~true}
-  cfnRole: ${ssm:aws-resources-cfn-role~true}
+  sslCert: ${ssm:sslCert~true}
+  cfnRole: ${ssm:cfnRole~true}
