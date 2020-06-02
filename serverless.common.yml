@@ -8,7 +8,9 @@ custom:
     dev: 1
   tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
   domain: "lodewijkwensveen.nl"
-  fullDomainName: ${self:custom.stage}.${self:custom.framework}.lodewijkwensveen.nl
+  fullDomainName:
+    dev: ${self:custom.stage}.${self:custom.framework}.lodewijkwensveen.nl
+    prod: ${self:custom.framework}.lodewijkwensveen.nl
   partialBucketURL: "s3-website-eu-west-1.amazonaws.com"
   githubUrl: https://github.com/lwensveen/${self:custom.frontEndProject}.git
   sslCert: ${ssm:sslCert~true}

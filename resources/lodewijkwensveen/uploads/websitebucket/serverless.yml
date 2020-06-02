@@ -3,7 +3,7 @@ service:
 org: lwensveen
 app: lodewijkwensveen-resources
 
-custom: ${file(../../../serverless.common.yml):custom}
+custom: ${file(../../../../serverless.common.yml):custom}
 
 provider:
   name: aws
@@ -17,7 +17,7 @@ resources:
     WebsiteBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.fullDomainName}
+        BucketName: ${self:custom.fullDomainName.$self{provider.stage}}
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html

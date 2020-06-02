@@ -17,7 +17,7 @@ resources:
     Project:
       Type: AWS::CodeBuild::Project
       Properties:
-        Name: ${opt:frontEndProject}
+        Name: ${opt:frontEndProject}-${self:custom.stage}
         Description: "test"
         BadgeEnabled: true
         Environment:
@@ -26,7 +26,8 @@ resources:
           Image: aws/codebuild/standard:4.0
         Artifacts:
           Type: S3
-          Location: ${self:custom.fullDomainName}
+          Location: ${self:custom.fullDomainName.$self{provider.stage}}
+          Name: '/'
           EncryptionDisabled: true
         ServiceRole: ${self:custom.serviceRole}
         Source:
